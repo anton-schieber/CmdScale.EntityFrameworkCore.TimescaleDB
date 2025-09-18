@@ -59,7 +59,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
                 .Where(x =>
                     x.Target.ChunkTimeInterval != x.Source.ChunkTimeInterval ||
                     x.Target.EnableCompression != x.Source.EnableCompression ||
-                    !AreChunkSkipColumnsEqual(x.Target.ChunkSkipColumns, x.Source.ChunkSkipColumns)
+                    !AreCompressionSegmentByEqual(x.Target.CompressionSegmentBy, x.Source.CompressionSegmentBy)
                 )
                 .ToList();
 
@@ -70,11 +70,11 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
                     TableName = hypertable.Target.TableName,
                     ChunkTimeInterval = hypertable.Target.ChunkTimeInterval,
                     EnableCompression = hypertable.Target.EnableCompression,
-                    ChunkSkipColumns = hypertable.Target.ChunkSkipColumns,
+                    CompressionSegmentBy = hypertable.Target.CompressionSegmentBy,
 
                     OldChunkTimeInterval = hypertable.Source.ChunkTimeInterval,
                     OldEnableCompression = hypertable.Source.EnableCompression,
-                    OldChunkSkipColumns = hypertable.Source.ChunkSkipColumns
+                    OldCompressionSegmentBy = hypertable.Source.CompressionSegmentBy
                 };
 
                 operations.Add(alterOperation);
@@ -99,8 +99,8 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
 
                 string chunkTimeInterval = entityType.FindAnnotation(HypertableAnnotations.ChunkTimeInterval)?.Value as string ?? DefaultValues.ChunkTimeInterval;
 
-                string? chunkSkipColumnsString = entityType.FindAnnotation(HypertableAnnotations.ChunkSkipColumns)?.Value as string;
-                List<string>? chunkSkipColumns = chunkSkipColumnsString?.Split(',', StringSplitOptions.TrimEntries).ToList();
+                string? CompressionSegmentByString = entityType.FindAnnotation(HypertableAnnotations.CompressionSegmentBy)?.Value as string;
+                List<string>? CompressionSegmentBy = CompressionSegmentByString?.Split(',', StringSplitOptions.TrimEntries).ToList();
 
                 bool enableCompression = entityType.FindAnnotation(HypertableAnnotations.EnableCompression)?.Value as bool? ?? false;
 
@@ -120,7 +120,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
                         TimeColumnName = timeColumnName,
                         ChunkTimeInterval = chunkTimeInterval,
                         EnableCompression = enableCompression,
-                        ChunkSkipColumns = chunkSkipColumns,
+                        CompressionSegmentBy = CompressionSegmentBy,
                         AdditionalDimensions = additionalDimensions
                     };
                 }
@@ -128,7 +128,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
         }
 
         // Helper method to compare two lists of chunk skip columns
-        private static bool AreChunkSkipColumnsEqual(IReadOnlyList<string>? list1, IReadOnlyList<string>? list2)
+        private static bool AreCompressionSegmentByEqual(IReadOnlyList<string>? list1, IReadOnlyList<string>? list2)
         {
             if (list1 == null && list2 == null) return true;
             if (list1 == null || list2 == null) return false;

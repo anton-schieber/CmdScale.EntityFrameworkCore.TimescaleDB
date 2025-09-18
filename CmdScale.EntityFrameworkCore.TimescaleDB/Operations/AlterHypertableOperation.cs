@@ -11,10 +11,10 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Operations
         // For chunk skipping, you need to anebl it with <code>SET timescaledb.enable_chunk_skipping = 'on'</coder>
         // Only timestamp-like and Integer-like columns are supported for chunk skipping
         // Cannot be reverted once enabled
-        public IReadOnlyList<string>? ChunkSkipColumns { get; set; } = null;
+        public IReadOnlyList<string>? CompressionSegmentBy { get; set; } = null;
 
         public string OldChunkTimeInterval { get; set; } = DefaultValues.ChunkTimeInterval;
         public bool OldEnableCompression { get; set; } = false;
-        public IReadOnlyList<string>? OldChunkSkipColumns { get; set; } = null;
+        public IReadOnlyList<string>? OldCompressionSegmentBy { get; set; } = null;
     }
 }

@@ -23,7 +23,7 @@
         /// Enable range statistics for a specific column in a compressed hypertable. This tracks a range of values for that column per chunk. 
         /// Used for chunk skipping during query optimization and applies only to the chunks created after chunk skipping is enabled.
         /// </summary>
-        public string[]? ChunkSkipColumns { get; set; } = null;
+        public string[]? CompressionSegmentBy { get; set; } = null;
 
         public HypertableAttribute(string timeColumnName)
         {

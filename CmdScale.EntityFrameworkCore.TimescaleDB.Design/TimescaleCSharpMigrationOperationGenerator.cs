@@ -57,12 +57,12 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
                 statements.Add($"ALTER TABLE \"\"{operation.TableName}\"\" SET (timescaledb.compress = true);");
             }
 
-            // ChunkSkipColumns
-            if (operation.ChunkSkipColumns != null && operation.ChunkSkipColumns.Count > 0)
+            // CompressionSegmentBy
+            if (operation.CompressionSegmentBy != null && operation.CompressionSegmentBy.Count > 0)
             {
                 statements.Add("SET timescaledb.enable_chunk_skipping = 'ON';");
 
-                foreach (string column in operation.ChunkSkipColumns)
+                foreach (string column in operation.CompressionSegmentBy)
                 {
                     statements.Add($"SELECT enable_chunk_skipping('\"\"{operation.TableName}\"\"', '{column}');");
                 }
@@ -117,9 +117,9 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
                 statements.Add($"ALTER TABLE \"\"{operation.TableName}\"\" SET (timescaledb.compress = {compressionValue});");
             }
 
-            // Handle ChunkSkipColumns
-            IReadOnlyList<string> newColumns = operation.ChunkSkipColumns ?? [];
-            IReadOnlyList<string> oldColumns = operation.OldChunkSkipColumns ?? [];
+            // Handle CompressionSegmentBy
+            IReadOnlyList<string> newColumns = operation.CompressionSegmentBy ?? [];
+            IReadOnlyList<string> oldColumns = operation.OldCompressionSegmentBy ?? [];
             List<string> addedColumns = [.. newColumns.Except(oldColumns)];
 
             if (addedColumns.Count != 0)

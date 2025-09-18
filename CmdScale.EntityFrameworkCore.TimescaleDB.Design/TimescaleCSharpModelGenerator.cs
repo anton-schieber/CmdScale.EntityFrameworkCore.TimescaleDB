@@ -18,7 +18,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
             string TimeColumnName,
             string ChunkTimeInterval,
             bool CompressionEnabled,
-            List<string> ChunkSkipColumns,
+            List<string> CompressionSegmentBy,
             List<Dimension> AdditionalDimensions
         );
 
@@ -37,9 +37,9 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
                     table[HypertableAnnotations.ChunkTimeInterval] = info.ChunkTimeInterval;
                     table[HypertableAnnotations.EnableCompression] = info.CompressionEnabled;
 
-                    if (info.ChunkSkipColumns.Count > 0)
+                    if (info.CompressionSegmentBy.Count > 0)
                     {
-                        table[HypertableAnnotations.ChunkSkipColumns] = string.Join(",", info.ChunkSkipColumns);
+                        table[HypertableAnnotations.CompressionSegmentBy] = string.Join(",", info.CompressionSegmentBy);
                     }
 
                     if (info.AdditionalDimensions.Count > 0)
@@ -112,7 +112,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
                                 TimeColumnName: columnName,
                                 ChunkTimeInterval: chunkInterval.ToString(),
                                 CompressionEnabled: compressionEnabled,
-                                ChunkSkipColumns: [],
+                                CompressionSegmentBy: [],
                                 AdditionalDimensions: []
                             );
                         }
@@ -162,7 +162,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
 
                         if (hypertables.TryGetValue((schema, name), out HypertableInfo? info))
                         {
-                            info.ChunkSkipColumns.Add(columnName);
+                            info.CompressionSegmentBy.Add(columnName);
                         }
                     }
                 }

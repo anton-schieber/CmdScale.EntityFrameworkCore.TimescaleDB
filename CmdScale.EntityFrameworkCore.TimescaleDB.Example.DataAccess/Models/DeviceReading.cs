@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CmdScale.EntityFrameworkCore.TimescaleDB.Example.DataAccess.Models
 {
-    [Hypertable(nameof(Time), ChunkSkipColumns = new[] { "Time" }, ChunkTimeInterval = "1 day")]
+    [Hypertable(nameof(Time), CompressionSegmentBy = new[] { "Time" }, ChunkTimeInterval = "1 day")]
     [PrimaryKey(nameof(Id), nameof(Time))]
     public class DeviceReading
     {

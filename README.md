@@ -95,7 +95,7 @@ public class WeatherDataConfiguration : IEntityTypeConfiguration<WeatherData>
 For simpler configurations, you can use the [Hypertable] attribute directly on your model class.
 
 ```csharp
-[Hypertable(nameof(Time), ChunkSkipColumns = new[] { "Time" }, ChunkTimeInterval = "86400000")]
+[Hypertable(nameof(Time), CompressionSegmentBy = new[] { nameof(Time) }, ChunkTimeInterval = "86400000")]
 [PrimaryKey(nameof(Id), nameof(Time))]
 public class DeviceReading
 {
